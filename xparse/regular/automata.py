@@ -135,7 +135,7 @@ class TableRow:
         --------
         >>> row = TableRow({"a": 0, "b": 1, "d": 3})
         >>> row.columns
-        ["a", "b", "d"]
+        ['a', 'b', 'd']
 
         Returns
         -------
@@ -152,8 +152,8 @@ class TableRow:
         Add 10 to all column values of a table row.
 
         >>> row = TableRow({"a": 1, "b": 2})
-        >>> new = row.map(lambda x: x + 10)
-        TableRow({"a": 11, "b": 12})
+        >>> row.map(lambda x: x + 10)
+        {'a': 11, 'b': 12}
 
         Parameters
         ----------
@@ -173,7 +173,6 @@ class Table:
     """
     A lookup table (implemented as a list of dictionaries).
     """
-
     def __init__(self, data=None, default=None):
         """Instantiate a table from a sequence of rows.
 
@@ -260,8 +259,7 @@ class Table:
 
         Examples
         --------
-        >>> table = Table([{"a": {1, 2}, "b": {2}}, {"a": {3}], default=set)
-        >>> print(table)
+        >>> table = Table([{"a": {1, 2}, "b": {2}}, {"a": {3}}], default=set)
 
         ===== ========== =========
                 a          b
@@ -304,6 +302,7 @@ class Table:
         Example
         -------
         >>> table = Table([{"a": 1, "b": 2}, {"a": 3}], default=None)
+        >>> table._column_widths()
         [1, 4]
 
         In this table the column "a" would occupy maximally 1 character,
@@ -333,7 +332,7 @@ class Table:
         --------
         >>> table = Table([{"a": 1, "b": 2}, {"a": 3, "c": 4}])
         >>> table.columns
-        ["a", "b", "c"]
+        ['a', 'b', 'c']
 
         Returns
         -------
@@ -374,8 +373,8 @@ class Table:
         Add 10 to all values in the table.
 
         >>> table = Table([{"a": 1, "b": 2}, {"a": 3, "b": 4}])
-        >>> table.map(lambda x: x + 10)
-        Table([{"a": 11, "b": 12}, {"a": 13, "b": 14}])
+        >>> table.map(lambda x: x + 10).as_list()
+        [{'a': 11, 'b': 12}, {'a': 13, 'b': 14}]
 
         Parameters
         ----------
@@ -386,6 +385,21 @@ class Table:
         table : a new table with updated values
         """
         return Table([row.map(func) for row in self], default=self.default)
+
+    def as_list(self):
+        """Convert the table to a list of dictionaries.
+
+        Examples
+        --------
+        >>> table = Table([{"a": 1, "b": 2}, {"a": 3, "b": 4}])
+        >>> table.as_list()
+        [{'a': 1, 'b': 2}, {'a': 3, 'b': 4}]
+
+        Returns
+        -------
+        list: list of dictionaries representing the table
+        """
+        return [row.data for row in self.data]
 
 
 # ----------------------------------------------------------------------
@@ -524,8 +538,8 @@ class Nfa:
           1     None
         ===== ========
 
-        >>> concat_tables(table_1, table_2)
-        Table([{"a": {1}, "b": {1}}, {}, {"c": {3}}, {}], default=None), [0, 2]
+
+        Concatenated tables:
 
         ===== ======== ======== ========
                 a        b        c

@@ -109,6 +109,8 @@ class Terminal:
         """
         if isinstance(other, (Terminal, NonTerminal, Epsilon)):
             return ProductionAlternatives(Production(self), Production(other))
+        elif isinstance(other, Production):
+            return ProductionAlternatives(Production(self), other)
         else:
             raise TypeError("Unexpected type")
 
