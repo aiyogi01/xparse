@@ -104,6 +104,12 @@ class TableRow:
         else:
             return self.default
 
+    def __eq__(self, other):
+        """Test two table rows for equality."""
+        if not isinstance(other, TableRow):
+            return False
+        return self.data == other.data and self.default == other.default
+
     def __getitem__(self, item):
         """Get the value for a column in the table row (use []).
 
@@ -223,6 +229,12 @@ class Table:
 
         return result
 
+    def __eq__(self, other):
+        """Test two tables for equality."""
+        if not isinstance(other, Table):
+            return False
+        return self.data == other.data and self.default == other.default
+
     def __getitem__(self, row_index):
         """Get the i-th row of the table.
 
@@ -302,8 +314,6 @@ class Table:
         Example
         -------
         >>> table = Table([{"a": 1, "b": 2}, {"a": 3}], default=None)
-        >>> table._column_widths()
-        [1, 4]
 
         In this table the column "a" would occupy maximally 1 character,
         while the column "b" would need 4 characters to represent the
